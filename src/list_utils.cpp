@@ -18,8 +18,14 @@
  * 
  * Time complexity: O(n) where n is the number of nodes
 */
-int length(const LinkedList& /*list*/) {
-    return 0;
+int length(const LinkedList& list) {
+    int count = 0;
+    LinkedList::Node* current = list.getHead();
+    while (current != nullptr) {
+        count++;
+        current = current->next;
+    }
+    return count;
 }
 
 /* TODO: sum implementation
@@ -36,8 +42,14 @@ int length(const LinkedList& /*list*/) {
  * 
  * Time complexity: O(n) where n is the number of nodes
 */
-int sum(const LinkedList& /*list*/) {
-    return 0;
+int sum(const LinkedList& list) {
+    int total = 0;
+    LinkedList::Node* current = list.getHead();
+    while (current != nullptr) {
+        total += current->data;
+        current = current->next;
+    }
+    return total;
 }
 
 /* TODO: contains implementation
@@ -54,7 +66,14 @@ int sum(const LinkedList& /*list*/) {
  * 
  * Time complexity: O(n) where n is the number of nodes
 */
-bool contains(const LinkedList& /*list*/, int /*k*/) {
+bool contains(const LinkedList& list, int k) {
+    LinkedList::Node* current = list.getHead();
+    while (current != nullptr) {
+        if (current->data == k) {
+            return true;
+        }
+        current = current->next;
+    }
     return false;
 }
 
@@ -75,8 +94,18 @@ bool contains(const LinkedList& /*list*/, int /*k*/) {
  * Time complexity: O(n) where n is the number of nodes
  * Space complexity: O(1) as we only use a constant amount of extra space
 */
-void reverse(LinkedList& /*list*/) {
-    /* your code */
+void reverse(LinkedList& list) {
+    LinkedList::Node* prev = nullptr;
+    LinkedList::Node* curr = list.getHead();
+    LinkedList::Node* next = nullptr;
+
+    while (curr != nullptr) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    list.setHead(prev);
 }
 
 /* TODO: nthFromEnd implementation
@@ -96,7 +125,16 @@ void reverse(LinkedList& /*list*/) {
  * 
  * Time complexity: O(n) where n is the number of nodes
 */
-int nthFromEnd(const LinkedList& /*list*/, int /*n*/) {
-    /* your code */
-    return 0;
+int nthFromEnd(const LinkedList& list, int n) {
+int len = length(list);
+    if (n < 0 || n >= len) {
+        throw std::out_of_range("Invalid n value");
+    }
+
+    int steps = len - n - 1;
+    LinkedList::Node* current = list.getHead();
+    for (int i = 0; i < steps; i++) {
+        current = current->next;
+    }
+    return current->data;
 }
