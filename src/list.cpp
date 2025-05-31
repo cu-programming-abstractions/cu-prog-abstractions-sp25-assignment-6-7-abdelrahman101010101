@@ -19,7 +19,7 @@ LinkedList::LinkedList() = default;
  * Hint: Use the deepCopy helper function to do the actual copying
 */
 LinkedList::LinkedList(const LinkedList& other) {
-    /* your code */
+    head = deepCopy(other.head);
 }
 
 /* TODO: assignment operator using copy-and-swap
@@ -37,7 +37,7 @@ LinkedList::LinkedList(const LinkedList& other) {
  * a = b;  // This should copy b's contents to a
 */
 LinkedList& LinkedList::operator=(LinkedList rhs) {
-    /* your code */
+     std::swap(head, rhs.head);
     return *this;
 }
 
@@ -60,7 +60,16 @@ void LinkedList::prepend(int value) {
  * Result should be [1 → 2 → 3]
 */
 void LinkedList::append(int value) {
-    /* your code */
+    Node* newNode = new Node{value, nullptr};
+    if (isEmpty()) {
+        head = newNode;
+    } else {
+        Node* current = head;
+        while (current->next) {
+            current = current->next;
+        }
+        current->next = newNode;
+    }
 }
 
 /* TODO: removeFront implementation
@@ -76,10 +85,15 @@ void LinkedList::append(int value) {
  * If list is [1 → 2 → 3]
  * removeFront() should return 1 and leave [2 → 3]
 */
-int LinkedList::removeFront() {
+   int LinkedList::removeFront() {
     if (isEmpty()) throw runtime_error("removeFront on empty list");
-    return 0; // placeholder
+    Node* temp = head;
+    int value = head->data;
+    head = head->next;
+    delete temp;
+    return value;
 }
+
 
 bool LinkedList::isEmpty() const { return head == nullptr; }
 
@@ -106,8 +120,9 @@ void LinkedList::print(ostream& out) const {
  * Return a new list [1 → 2 → 3] with new nodes
 */
 LinkedList::Node* LinkedList::deepCopy(Node* src) {
-    /* your code */
-    return nullptr;
+   if (!src) return nullptr;
+Node* newNode = new Node{src->data, deepCopy(src->next)};
+return newNode;
 }
 
 void LinkedList::freeChain(Node* n) {
